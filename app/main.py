@@ -17,8 +17,8 @@ from app.ml_model import predict_anomaly, load_model, train_model
 from app.watcher import LogWatcher
 
 app = FastAPI(title="AI Log Analyzer")
-templates = Jinja2Templates(directory="templates")
-
+BASE_DIR = Path(__file__).resolve().parent
+templates = Jinja2Templates(directory=str(BASE_DIR.parent / "templates"))
 UPLOAD_DIR = "logs"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
@@ -177,16 +177,24 @@ def api_watch_status():
 # Live dashboard page
 @app.get("/live", response_class=HTMLResponse)
 def live_dashboard(request: Request):
-    return templates.TemplateResponse("live.html", {
-        "request": request,
-        "watch_path": _watch_path,
-    })
+    return templates.TemplateResponse(
+        name="live.html",
+        context={
+            "request": request,
+            "watch_path": _watch_path,
+        },
+        request=request
+    )
 
 
 # Home
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse(
+        name="index.html",
+        context={"request": request},
+        request=request
+    )
 
 
 # Upload analyze
@@ -215,14 +223,18 @@ async def analyze_log(request: Request, file: UploadFile = File(...)):
         except Exception:
             pass
     ml_result = predict_anomaly(logs)
-    return templates.TemplateResponse("dashboard.html", {
-        "request": request,
-        "features": features,
-        "rule_alerts": rule_incidents,
-        "ml_result": ml_result,
-        "filename": file.filename,
-        "total_logs": features["total_logs"],
-    })
+    return templates.TemplateResponse(
+        name="dashboard.html",
+        context={
+            "request": request,
+            "features": features,
+            "rule_alerts": rule_incidents,
+            "ml_result": ml_result,
+            "filename": file.filename,
+            "total_logs": features["total_logs"],
+        },
+        request=request
+    )
 
 
 # Path analyze
@@ -266,11 +278,15 @@ def analyze_from_path(request: Request, path: str = Query(...)):
         except Exception:
             pass
     ml_result = predict_anomaly(logs)
-    return templates.TemplateResponse("dashboard.html", {
-        "request": request,
-        "features": features,
-        "rule_alerts": rule_incidents,
-        "ml_result": ml_result,
-        "filename": filename,
-        "total_logs": features["total_logs"],
-    })
+    return templates.TemplateResponse(
+        name="dashboard.html",
+        context={
+            "request": request,
+            "features": features,
+            "rule_alerts": rule_incidents,
+            "ml_result": ml_result,
+            "filename": filename,
+            "total_logs": features["total_logs"],
+        },
+        request=request
+    )

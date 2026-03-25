@@ -30,43 +30,28 @@ def _build_pipeline(max_features: int, svd_components: int, contamination: float
     )
 
 
-def train_model(
-    sample_logs: list[dict],
-    max_features: int = 200,
-    svd_components: int = 20,
-    contamination: float = 0.05,
-) -> None:
-    """Fit and persist the model from a list of log dicts with a 'message' key.
+def train_model(logs: list[dict]):
+    
+    texts = []
 
-    The dataset may contain only a few messages, which can result in a TF-IDF
-    matrix with fewer columns than the requested number of SVD components.  In
-    that case we recompute a suitable component count based on the actual
-    feature size, since sklearn's TruncatedSVD will raise a ValueError.
-    """
-    texts = [log["message"] for log in sample_logs if log.get("message", "").strip()]
+    for log in logs:
+        msg = log.get("message", "")
+        level = log.get("level", "")
+        
+        # Combine level + message (IMPORTANT UPGRADE)
+        combined = f"{level} {msg}"
+        texts.append(combined)
+    # Numerical features
+    lengths = [len(t) for t in texts]
+    num_features = np.array(lengths).reshape(-1, 1)
 
-    if len(texts) < 2:
-        raise ValueError("Need at least 2 non-empty log messages to train.")
-
-    # pre-fit TF-IDF to know how many features we actually have
-    tfidf = TfidfVectorizer(max_features=max_features, sublinear_tf=True)
-    X = tfidf.fit_transform(texts)
-    n_features = X.shape[1]
-
-    # choose svd components <= n_features - 1 (TruncatedSVD requirement)
-    effective_svd = min(svd_components, max(1, n_features - 1))
-
-    pipeline = Pipeline(
-        [
-            ("tfidf", tfidf),
-            ("svd", TruncatedSVD(n_components=effective_svd, random_state=42)),
-            ("isolation", IsolationForest(contamination=contamination, random_state=42)),
-        ]
-    )
+    pipeline = Pipeline([
+        ("tfidf", TfidfVectorizer(max_features=200)),
+        ("clf", IsolationForest(contamination=0.05))
+    ])
 
     pipeline.fit(texts)
 
-    os.makedirs(MODEL_DIR, exist_ok=True)
     joblib.dump(pipeline, MODEL_PATH)
 
 
@@ -91,7 +76,12 @@ def predict_anomaly(logs: list[dict]) -> dict:
             "anomaly_ratio": 0.0,
         }
 
-    texts = [log.get("message", "") for log in logs]
+    texts = []
+
+    for log in logs:
+        msg = log.get("message", "")
+        level = log.get("level", "")
+        texts.append(f"{level} {msg}")
     if not texts:
         return {
             "prediction": "Normal",

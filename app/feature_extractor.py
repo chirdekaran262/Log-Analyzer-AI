@@ -1,23 +1,24 @@
-import numpy as np
 from collections import Counter
+from datetime import datetime
+import numpy as np
+import math
 
 
 def extract_features(logs: list[dict]) -> dict:
-    """
-    Extract structured numerical features from a list of parsed log dicts.
-    Each dict must contain at minimum: 'level' and 'message'.
-    """
     error_count = 0
     warn_count = 0
     info_count = 0
-    failed_login_count = 0
     critical_count = 0
+    failed_login_count = 0
+
+    timestamps = []
     unique_ips = set()
-    sources = []
+    messages = []
 
     for log in logs:
-        level = log.get("level", "").upper().strip()
+        level = log.get("level", "").upper()
         message = log.get("message", "").lower()
+        messages.append(message)
 
         if level == "ERROR":
             error_count += 1
@@ -28,22 +29,31 @@ def extract_features(logs: list[dict]) -> dict:
         elif level == "CRITICAL":
             critical_count += 1
 
-        if "failed login" in message or "authentication failure" in message:
+        if "failed login" in message:
             failed_login_count += 1
 
-        # Naive IP extraction: look for tokens that look like IPs
-        for token in log.get("message", "").split():
-            parts = token.strip("[](),").split(".")
-            if len(parts) == 4 and all(p.isdigit() for p in parts):
-                unique_ips.add(token.strip("[](),"))
+        # Timestamp handling
+        try:
+            timestamps.append(datetime.fromisoformat(log["timestamp"].replace("Z", "")))
+        except:
+            pass
 
-        source = log.get("source", log.get("host", "unknown"))
-        sources.append(source)
+        # IP detection
+        for token in message.split():
+            if token.count(".") == 3:
+                unique_ips.add(token)
 
     total_logs = len(logs)
-    error_ratio = error_count / total_logs if total_logs > 0 else 0.0
-    warn_ratio = warn_count / total_logs if total_logs > 0 else 0.0
-    top_sources = Counter(sources).most_common(3)
+
+    # ? Time gap feature
+    timestamps.sort()
+    time_diffs = np.diff(timestamps) if len(timestamps) > 1 else []
+    avg_time_gap = np.mean([td.total_seconds() for td in time_diffs]) if len(time_diffs) else 0
+
+    # ?? Entropy feature
+    counter = Counter(messages)
+    probs = [v / total_logs for v in counter.values()]
+    entropy = -sum(p * math.log2(p) for p in probs) if probs else 0
 
     return {
         "error_count": error_count,
@@ -52,8 +62,10 @@ def extract_features(logs: list[dict]) -> dict:
         "critical_count": critical_count,
         "failed_login_count": failed_login_count,
         "total_logs": total_logs,
-        "error_ratio": round(error_ratio, 4),
-        "warn_ratio": round(warn_ratio, 4),
         "unique_ip_count": len(unique_ips),
-        "top_sources": top_sources,
+
+        # NEW FEATURES
+        "avg_time_gap": round(avg_time_gap, 4),
+        "log_entropy": round(entropy, 4),
     }
+    

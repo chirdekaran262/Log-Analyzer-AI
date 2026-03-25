@@ -348,7 +348,10 @@
             </div>
             <div class="stat-card">
                 <div class="stat-label">Errors</div>
-                <div class="stat-value" style="color:var(--red)">{{ features.error_count }}</div>
+                <div class="stat-value" style="color:var(--red)">
+                    <p><b>Average Time Gap:</b> {{ features.avg_time_gap }}</p>
+                    <p><b>Log Entropy:</b> {{ features.log_entropy }}</p>
+                </div>
             </div>
             <div class="stat-card">
                 <div class="stat-label">Warnings</div>
@@ -391,7 +394,13 @@
                     </div>
                     {% else %}
                     <div class="status-badge status-unknown mb-3">
-                        <span class="dot dot-yellow"></span> {{ ml_result.prediction | upper }}
+                        <span class="dot dot-yellow"></span>
+                        <h3>ML Result</h3>
+
+                        <p><b>Prediction:</b> {{ ml_result.prediction }}</p>
+                        <p><b>Anomaly Logs:</b> {{ ml_result.anomaly_logs }}</p>
+                        <p><b>Anomaly Ratio:</b> {{ ml_result.anomaly_ratio }}</p>
+                        <p><b>Average Score:</b> {{ ml_result.avg_score }}</p>
                     </div>
                     {% endif %}
 
