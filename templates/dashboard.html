@@ -342,29 +342,50 @@
 
         <!-- Stat strip -->
         <div class="stat-grid">
-            <div class="stat-card">
-                <div class="stat-label">Total Logs</div>
-                <div class="stat-value" style="color:var(--cyan)">{{ features.total_logs }}</div>
+
+            <!-- Total Logs -->
+            <div class="stat-card glow-cyan">
+                <div class="stat-head">
+                    <span>📊 Total Logs</span>
+                </div>
+                <div class="stat-value">{{ features.total_logs }}</div>
             </div>
-            <div class="stat-card">
-                <div class="stat-label">Errors</div>
-                <div class="stat-value" style="color:var(--red)">
-                    <p><b>Average Time Gap:</b> {{ features.avg_time_gap }}</p>
-                    <p><b>Log Entropy:</b> {{ features.log_entropy }}</p>
+
+            <!-- Errors + Metrics -->
+            <div class="stat-card glow-red">
+                <div class="stat-head">
+                    <span>❌ Error Insights</span>
+                </div>
+                <div class="stat-sub">
+                    <p><span>⏱ Avg Time Gap</span> <b>{{ features.avg_time_gap }}</b></p>
+                    <p><span>📈 Log Entropy</span> <b>{{ features.log_entropy }}</b></p>
                 </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-label">Warnings</div>
-                <div class="stat-value" style="color:var(--orange)">{{ features.warn_count }}</div>
+
+            <!-- Warnings -->
+            <div class="stat-card glow-orange">
+                <div class="stat-head">
+                    <span>⚠️ Warnings</span>
+                </div>
+                <div class="stat-value">{{ features.warn_count }}</div>
             </div>
-            <div class="stat-card">
-                <div class="stat-label">Failed Logins</div>
-                <div class="stat-value" style="color:var(--pink)">{{ features.failed_login_count }}</div>
+
+            <!-- Failed Logins -->
+            <div class="stat-card glow-pink">
+                <div class="stat-head">
+                    <span>🔐 Failed Logins</span>
+                </div>
+                <div class="stat-value">{{ features.failed_login_count }}</div>
             </div>
-            <div class="stat-card">
-                <div class="stat-label">Anomalous</div>
-                <div class="stat-value" style="color:var(--yellow)">{{ ml_result.anomaly_logs }}</div>
+
+            <!-- Anomaly -->
+            <div class="stat-card glow-yellow">
+                <div class="stat-head">
+                    <span>🤖 Anomalies Detected</span>
+                </div>
+                <div class="stat-value">{{ ml_result.anomaly_logs }}</div>
             </div>
+
         </div>
 
         <!-- Main grid -->
@@ -418,7 +439,9 @@
                     </div>
                     <div class="metric-row">
                         <span class="metric-key">error ratio</span>
-                        <span class="metric-val">{{ '%.1f'|format(features.error_ratio * 100) }}%</span>
+                        <span class="metric-val">
+                            {{ '%.1f'|format(features.get("error_ratio", 0) * 100) }}%
+                        </span>
                     </div>
                 </div>
             </div>
