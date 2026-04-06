@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopForge — E-Commerce</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@600&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        :root {
+            --bg: #F7F6F2;
+            --card: #FFFFFF;
+            --border: #E8E5DE;
+            --text: #1A1916;
+            --muted: #7A7870;
+            --accent: #D85A30;
+            --accent2: #0F6E56;
+            --r: 10px;
+            --font: 'DM Sans', sans-serif;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            min-height: 100vh
+        }
+
+        /* NAV */
+        nav {
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 0 28px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 21px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-right: 12px;
+            letter-spacing: -0.5px
+        }
+
+        .logo span {
+            color: var(--text)
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2px;
+            flex: 1
+        }
+
+        .nav-link {
+            padding: 6px 13px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--muted);
+            transition: all .15s;
+            border: none;
+            background: none;
+            font-family: var(--font)
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #EDE9E0;
+            color: var(--text)
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: auto
+        }
+
+        .nbtn {
+            padding: 7px 15px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            transition: all .15s;
+            font-family: var(--font)
+        }
+
+        .nbtn:hover {
+            background: #EDE9E0
+        }
+
+        .nbtn.primary {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent)
+        }
+
+        .nbtn.primary:hover {
+            background: #C24E26
+        }
+
+        .cart-btn {
+            position: relative
+        }
+
+        .cbadge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 50%;
+            width: 17px;
+            height: 17px;
+            font-size: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none
+        }
+
+        /* PAGES */
+        .page {
+            display: none
+        }
+
+        .page.active {
+            display: block
+        }
+
+        /* HOME */
+        .hero {
+            background: #1A1916;
+            padding: 60px 28px 52px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 40px
+        }
+
+        .hero-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 40px;
+            font-weight: 600;
+            color: #fff;
+            line-height: 1.2;
+            margin-bottom: 14px
+        }
+
+        .hero-text p {
+            color: #A8A39B;
+            font-size: 15px;
+            margin-bottom: 26px;
+            max-width: 380px;
+            line-height: 1.6
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 10px
+        }
+
+        .hbtn {
+            padding: 12px 26px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            font-family: var(--font);
+            transition: all .15s
+        }
+
+        .hbtn.p {
+            background: var(--accent);
+            color: #fff
+        }
+
+        .hbtn.p:hover {
+            background: #C24E26
+        }
+
+        .hbtn.s {
+            background: rgba(255, 255, 255, .1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, .2)
+        }
+
+        .hbtn.s:hover {
+            background: rgba(255, 255, 255, .17)
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 36px;
+            margin-top: 36px
+        }
+
+        .hstat .v {
+            font-size: 24px;
+            font-weight: 600;
+            color: #fff;
+            font-family: 'Playfair Display', serif
+        }
+
+        .hstat .l {
+            font-size: 11px;
+            color: #7A756E;
+            margin-top: 2px;
+            text-transform: uppercase;
+            letter-spacing: .5px
+        }
+
+        .section {
+            padding: 36px 28px
+        }
+
+        .sec-hd {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px
+        }
+
+        .sec-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 600
+        }
+
+        .see-all {
+            font-size: 13px;
+            color: var(--accent);
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: var(--font);
+            font-weight: 500
+        }
+
+        .see-all:hover {
+            text-decoration: underline
+        }
+
+        /* PRODUCTS GRID */
+        .pgrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+            gap: 16px
+        }
+
+        .pcard {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all .18s
+        }
+
+        .pcard:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, .07)
+        }
+
+        .pimg {
+            width: 100%;
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 44px;
+            background: #F5F3EE
+        }
+
+        .pinfo {
+            padding: 12px 14px 8px
+        }
+
+        .pname {
+            font-weight: 500;
+            font-size: 13.5px;
+            margin-bottom: 3px
+        }
+
+        .pprice {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 15px
+        }
+
+        .pstock {
+            font-size: 11px;
+            margin-top: 4px;
+            font-weight: 500
+        }
+
+        .in-s {
+            color: var(--accent2)
+        }
+
+        .lo-s {
+            color: #BA7517
+        }
+
+        .ou-s {
+            color: #A32D2D
+        }
+
+        .pact {
+            display: flex;
+            gap: 6px;
+            padding: 8px 14px 14px
+        }
+
+        .badd {
+            flex: 1;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            background: var(--accent);
+            color: #fff;
+            transition: all .15s;
+            font-family: var(--font)
+        }
+
+        .badd:hover {
+            background: #C24E26
+        }
+
+        .badd:disabled {
+            background: #C8C4BB;
+            cursor: not-allowed
+        }
+
+        .bwish {
+            padding: 8px 11px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            cursor: pointer;
+            font-size: 15px;
+            transition: all .15s
+        }
+
+        .bwish:hover {
+            background: #FFF0EB;
+            border-color: #F0997B
+        }
+
+        .bwish.on {
+            background: #FFF0EB;
+            border-color: var(--accent)
+        }
+
+        /* SEARCH BAR */
+        .sbar {
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 28px;
+            display: flex;
+            gap: 10px;
+            align-items: center
+        }
+
+        .sbar input,
+        .sbar select {
+            padding: 9px 14px;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            font-size: 13px;
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text)
+        }
+
+        .sbar input {
+            flex: 1
+        }
+
+        .sbar input:focus,
+        .sbar select:focus {
+            outline: none;
+            border-color: var(--accent)
+        }
+
+        /* CART */
+        .clayout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 20px;
+            padding: 24px 28px;
+            align-items: start
+        }
+
+        .cart-box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r)
+        }
+
+        .cart-hd {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .citem {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .citem:last-child {
+            border-bottom: none
+        }
+
+        .cimg {
+            width: 58px;
+            height: 58px;
+            background: #F5F3EE;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            flex-shrink: 0
+        }
+
+        .cname {
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 3px
+        }
+
+        .cunit {
+            color: var(--muted);
+            font-size: 12px
+        }
+
+        .qctrl {
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .qbtn {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            cursor: pointer;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .13s;
+            font-family: var(--font)
+        }
+
+        .qbtn:hover {
+            background: #EDE9E0
+        }
+
+        .qtot {
+            font-weight: 600;
+            font-size: 14px;
+            min-width: 64px;
+            text-align: right
+        }
+
+        .xbtn {
+            color: var(--muted);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            transition: color .13s
+        }
+
+        .xbtn:hover {
+            color: #A32D2D
+        }
+
+        .sumbox {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            padding: 22px;
+            position: sticky;
+            top: 74px
+        }
+
+        .sumtitle {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 18px
+        }
+
+        .sumrow {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 11px;
+            color: var(--muted)
+        }
+
+        .sumrow.tot {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text);
+            padding-top: 13px;
+            margin-top: 4px;
+            border-top: 1px solid var(--border)
+        }
+
+        .couponrow {
+            display: flex;
+            gap: 8px;
+            margin: 16px 0
+        }
+
+        .couponrow input {
+            flex: 1;
+            padding: 9px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: var(--font);
+            background: var(--bg)
+        }
+
+        .couponrow input:focus {
+            outline: none;
+            border-color: var(--accent)
+        }
+
+        .bco {
+            width: 100%;
+            padding: 13px;
+            border-radius: 8px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all .15s;
+            font-family: var(--font)
+        }
+
+        .bco:hover {
+            background: #C24E26
+        }
+
+        /* CHECKOUT */
+        .chlayout {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 20px;
+            padding: 24px 28px;
+            align-items: start
+        }
+
+        .chform {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            padding: 26px
+        }
+
+        .ftitle {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 9px
+        }
+
+        .stepbadge {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0
+        }
+
+        .fgrid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 18px
+        }
+
+        .ffull {
+            grid-column: 1/-1
+        }
+
+        .fgroup {
+            display: flex;
+            flex-direction: column;
+            gap: 4px
+        }
+
+        .fgroup label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--muted)
+        }
+
+        .fgroup input,
+        .fgroup select {
+            padding: 9px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text)
+        }
+
+        .fgroup input:focus,
+        .fgroup select:focus {
+            outline: none;
+            border-color: var(--accent)
+        }
+
+        .payopts {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 18px;
+            flex-wrap: wrap
+        }
+
+        .popt {
+            flex: 1;
+            padding: 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all .15s;
+            font-size: 13px;
+            font-weight: 500;
+            min-width: 72px
+        }
+
+        .popt:hover {
+            border-color: var(--accent);
+            background: #FFF8F5
+        }
+
+        .popt.sel {
+            border-color: var(--accent);
+            background: #FFF0EB;
+            color: var(--accent)
+        }
+
+        /* ORDERS */
+        .olayout {
+            padding: 28px
+        }
+
+        .olayout h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 22px
+        }
+
+        .ocard {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            padding: 20px 22px;
+            margin-bottom: 14px
+        }
+
+        .otop {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px
+        }
+
+        .oid {
+            font-weight: 600;
+            font-size: 14px
+        }
+
+        .odate {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 2px
+        }
+
+        .ostatus {
+            padding: 4px 11px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600
+        }
+
+        .ss {
+            background: #E1F5EE;
+            color: #0F6E56
+        }
+
+        .sp {
+            background: #FAEEDA;
+            color: #854F0B
+        }
+
+        .sd {
+            background: #EAF3DE;
+            color: #3B6D11
+        }
+
+        .sc {
+            background: #FCEBEB;
+            color: #A32D2D
+        }
+
+        .ochips {
+            display: flex;
+            gap: 7px;
+            margin-bottom: 12px;
+            flex-wrap: wrap
+        }
+
+        .ochip {
+            background: #F5F3EE;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .obot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .ototal {
+            font-weight: 600;
+            font-size: 15px
+        }
+
+        .trkbtn {
+            padding: 7px 15px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            background: none;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            color: var(--text);
+            transition: all .15s;
+            font-family: var(--font)
+        }
+
+        .trkbtn:hover {
+            background: #EDE9E0
+        }
+
+        /* ACCOUNT */
+        .alayout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 20px;
+            padding: 28px;
+            align-items: start
+        }
+
+        .aside {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            padding: 22px;
+            position: sticky;
+            top: 74px
+        }
+
+        .avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #E8834A);
+            color: #fff;
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 14px;
+            font-family: 'Playfair Display', serif
+        }
+
+        .aname {
+            text-align: center;
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 3px
+        }
+
+        .arole {
+            text-align: center;
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 18px
+        }
+
+        .aside-links {
+            display: flex;
+            flex-direction: column;
+            gap: 2px
+        }
+
+        .alink {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            color: var(--muted);
+            transition: all .15s;
+            border: none;
+            background: none;
+            font-family: var(--font);
+            text-align: left
+        }
+
+        .alink:hover {
+            background: #EDE9E0;
+            color: var(--text)
+        }
+
+        .alink.active {
+            background: #FFF0EB;
+            color: var(--accent);
+            font-weight: 500
+        }
+
+        .acontent {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            padding: 26px
+        }
+
+        .asectitle {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 18px;
+            padding-bottom: 13px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .statsgrid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px
+        }
+
+        .statcard {
+            background: #F5F3EE;
+            padding: 18px;
+            border-radius: 8px;
+            text-align: center
+        }
+
+        .statcard .sv {
+            font-size: 22px;
+            font-weight: 600;
+            font-family: 'Playfair Display', serif
+        }
+
+        .statcard .sl {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 5px
+        }
+
+        /* WISHLIST */
+        .wgrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            padding: 24px 28px
+        }
+
+        /* EMPTY */
+        .empty {
+            text-align: center;
+            padding: 64px 24px
+        }
+
+        .empty .eico {
+            font-size: 52px;
+            opacity: .35;
+            margin-bottom: 18px
+        }
+
+        .empty .etitle {
+            font-weight: 600;
+            font-size: 17px;
+            margin-bottom: 8px
+        }
+
+        .empty .esub {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 22px
+        }
+
+        /* PAGE HEADER */
+        .pghd {
+            padding: 20px 28px 0;
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 600
+        }
+
+        /* TOAST */
+        .tcontainer {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 9999;
+            pointer-events: none
+        }
+
+        .toast {
+            background: #1A1916;
+            color: #fff;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            max-width: 290px;
+            animation: tin .2s ease;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            pointer-events: auto
+        }
+
+        .ticon.ok {
+            color: #5DCAA5
+        }
+
+        .ticon.er {
+            color: #F09595
+        }
+
+        .ticon.wa {
+            color: #FAC775
+        }
+
+        @keyframes tin {
+            from {
+                opacity: 0;
+                transform: translateY(8px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        /* DIVIDER */
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 24px 0
+        }
+
+        @media(max-width:768px) {
+
+            .clayout,
+            .chlayout,
+            .alayout {
+                grid-template-columns: 1fr
+            }
+
+            .pgrid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr))
+            }
+
+            nav {
+                padding: 0 14px
+            }
+
+            .section,
+            .olayout,
+            .alayout,
+            .wgrid {
+                padding-left: 14px;
+                padding-right: 14px
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <span class="logo">Shop<span>Forge</span></span>
+        <div class="nav-links">
+            <button class="nav-link active" onclick="showPage('home')">Home</button>
+            <button class="nav-link" onclick="showPage('products')">Products</button>
+            <button class="nav-link" onclick="showPage('orders')">Orders</button>
+            <button class="nav-link" onclick="showPage('wishlist')">Wishlist</button>
+            <button class="nav-link" onclick="showPage('account')">Account</button>
+        </div>
+        <div class="nav-right">
+            <button class="nbtn cart-btn" onclick="showPage('cart')">
+                Cart <span class="cbadge" id="cart-count">0</span>
+            </button>
+            <button class="nbtn primary" onclick="showPage('checkout')">Checkout</button>
+        </div>
+    </nav>
+
+    <!-- HOME -->
+    <div class="page active" id="page-home">
+        <div class="hero">
+            <div class="hero-text">
+                <h1>Quality Products,<br>Delivered Fast.</h1>
+                <p>From running shoes to smart watches — everything you need, at the best prices in India.</p>
+                <div class="hero-btns">
+                    <button class="hbtn p" onclick="showPage('products')">Shop Now</button>
+                    <button class="hbtn s" onclick="showPage('orders')">Track Order</button>
+                </div>
+                <div class="hero-stats">
+                    <div class="hstat">
+                        <div class="v">8+</div>
+                        <div class="l">Products</div>
+                    </div>
+                    <div class="hstat">
+                        <div class="v">?349</div>
+                        <div class="l">Starting at</div>
+                    </div>
+                    <div class="hstat">
+                        <div class="v">4</div>
+                        <div class="l">Couriers</div>
+                    </div>
+                    <div class="hstat">
+                        <div class="v">3</div>
+                        <div class="l">Gateways</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="sec-hd">
+                <span class="sec-title">Featured Products</span>
+                <button class="see-all" onclick="showPage('products')">See all ?</button>
+            </div>
+            <div class="pgrid" id="home-products"></div>
+        </div>
+
+        <div style="padding:0 28px 36px">
+            <div
+                style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px">
+                <div>
+                    <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:600;margin-bottom:6px">
+                        Free Delivery on Orders Over ?999</div>
+                    <div style="font-size:13px;color:var(--muted)">Use coupon <strong>SAVE10</strong> for ?100 off or
+                        <strong>FIRST50</strong> for ?50 off your first order.</div>
+                </div>
+                <button class="hbtn p" onclick="showPage('products')">Shop Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="page" id="page-products">
+        <div class="sbar">
+            <input type="text" id="search-input" placeholder="Search shoes, earbuds, watches..."
+                oninput="filterProducts()">
+            <select id="sort-select" onchange="filterProducts()">
+                <option value="">Sort by</option>
+                <option value="price-asc">Price: Low ? High</option>
+                <option value="price-desc">Price: High ? Low</option>
+                <option value="name">Name A–Z</option>
+                <option value="stock">In Stock First</option>
+            </select>
+        </div>
+        <div class="section">
+            <div class="sec-hd">
+                <span class="sec-title">All Products</span>
+                <span id="product-count" style="font-size:13px;color:var(--muted)">8 items</span>
+            </div>
+            <div class="pgrid" id="all-products"></div>
+        </div>
+    </div>
+
+    <!-- CART -->
+    <div class="page" id="page-cart">
+        <div class="pghd">Shopping Cart</div>
+        <div class="clayout">
+            <div class="cart-box" id="cart-items-list"></div>
+            <div class="sumbox">
+                <div class="sumtitle">Order Summary</div>
+                <div class="sumrow"><span>Subtotal</span><span id="sum-sub">?0</span></div>
+                <div class="sumrow"><span>Delivery</span><span id="sum-del">?49</span></div>
+                <div class="sumrow"><span>Discount</span><span id="sum-disc" style="color:var(--accent2)">??0</span>
+                </div>
+                <div class="sumrow tot"><span>Total</span><span id="sum-tot">?0</span></div>
+                <div class="couponrow">
+                    <input type="text" id="coupon-input" placeholder="Coupon code">
+                    <button class="nbtn" onclick="applyCoupon()">Apply</button>
+                </div>
+                <button class="bco" onclick="showPage('checkout')">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHECKOUT -->
+    <div class="page" id="page-checkout">
+        <div class="pghd">Checkout</div>
+        <div class="chlayout">
+            <div style="display:flex;flex-direction:column;gap:16px">
+                <div class="chform">
+                    <div class="ftitle"><span class="stepbadge">1</span>Delivery Address</div>
+                    <div class="fgrid">
+                        <div class="fgroup"><label>First name</label><input type="text" value="Priya"></div>
+                        <div class="fgroup"><label>Last name</label><input type="text" value="Sharma"></div>
+                        <div class="fgroup ffull"><label>Address</label><input type="text" value="42, MG Road, Fort">
+                        </div>
+                        <div class="fgroup"><label>City</label><input type="text" value="Mumbai"></div>
+                        <div class="fgroup"><label>PIN code</label><input type="text" value="400001"></div>
+                        <div class="fgroup"><label>State</label><select>
+                                <option>Maharashtra</option>
+                                <option>Delhi</option>
+                                <option>Karnataka</option>
+                                <option>Tamil Nadu</option>
+                            </select></div>
+                        <div class="fgroup"><label>Phone</label><input type="text" value="+91 98765 43210"></div>
+                    </div>
+                </div>
+
+                <div class="chform">
+                    <div class="ftitle"><span class="stepbadge">2</span>Payment Method</div>
+                    <div class="payopts">
+                        <div class="popt sel" onclick="selectPay(this)">Razorpay</div>
+                        <div class="popt" onclick="selectPay(this)">PayU</div>
+                        <div class="popt" onclick="selectPay(this)">Stripe</div>
+                        <div class="popt" onclick="selectPay(this)">Cash on Delivery</div>
+                    </div>
+                    <div id="card-fields">
+                        <div class="fgrid">
+                            <div class="fgroup ffull"><label>Card number</label><input type="text"
+                                    placeholder="1234 5678 9012 3456" maxlength="19"></div>
+                            <div class="fgroup"><label>Expiry</label><input type="text" placeholder="MM / YY"></div>
+                            <div class="fgroup"><label>CVV</label><input type="text" placeholder="•••" maxlength="3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sumbox" style="top:74px">
+                <div class="sumtitle">Order Review</div>
+                <div id="co-items" style="margin-bottom:14px;display:flex;flex-direction:column;gap:7px"></div>
+                <div class="divider" style="margin:12px 0"></div>
+                <div class="sumrow"><span>Subtotal</span><span id="co-sub">?0</span></div>
+                <div class="sumrow"><span>Delivery</span><span>?49</span></div>
+                <div class="sumrow tot"><span>Total</span><span id="co-tot">?0</span></div>
+                <button class="bco" onclick="placeOrder()">Place Order</button>
+                <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px">Secured · 256-bit SSL
+                    encryption</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ORDERS -->
+    <div class="page" id="page-orders">
+        <div class="olayout">
+            <h2>My Orders</h2>
+            <div id="orders-list"></div>
+        </div>
+    </div>
+
+    <!-- ACCOUNT -->
+    <div class="page" id="page-account">
+        <div class="alayout">
+            <div class="aside">
+                <div class="avatar">P</div>
+                <div class="aname">Priya Sharma</div>
+                <div class="arole">Premium Customer · usr_4821</div>
+                <div class="aside-links">
+                    <button class="alink active">Profile</button>
+                    <button class="alink" onclick="showPage('orders')">My Orders</button>
+                    <button class="alink" onclick="showToast('Addresses section','ok')">Addresses</button>
+                    <button class="alink" onclick="showToast('Payment methods','ok')">Payment Methods</button>
+                    <button class="alink" onclick="showToast('Notification preferences','ok')">Notifications</button>
+                    <button class="alink" style="color:#A32D2D;margin-top:12px"
+                        onclick="showToast('Logged out successfully','wa')">Logout</button>
+                </div>
+            </div>
+            <div class="acontent">
+                <div class="asectitle">Profile Information</div>
+                <div class="fgrid">
+                    <div class="fgroup"><label>Full name</label><input type="text" value="Priya Sharma"></div>
+                    <div class="fgroup"><label>Email</label><input type="text" value="priya.sharma@email.com"></div>
+                    <div class="fgroup"><label>Phone</label><input type="text" value="+91 98765 43210"></div>
+                    <div class="fgroup"><label>Date of birth</label><input type="text" value="1994-05-12"></div>
+                    <div class="fgroup ffull"><label>Location</label><input type="text"
+                            value="Mumbai, Maharashtra, India"></div>
+                </div>
+                <button class="nbtn primary" onclick="showToast('Profile updated!','ok')"
+                    style="padding:9px 20px;margin-top:4px">Save Changes</button>
+
+                <div class="asectitle" style="margin-top:30px">Account Stats</div>
+                <div class="statsgrid">
+                    <div class="statcard">
+                        <div class="sv">7</div>
+                        <div class="sl">Total Orders</div>
+                    </div>
+                    <div class="statcard">
+                        <div class="sv">?24,580</div>
+                        <div class="sl">Total Spent</div>
+                    </div>
+                    <div class="statcard">
+                        <div class="sv" id="wish-count">0</div>
+                        <div class="sl">Wishlisted</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WISHLIST -->
+    <div class="page" id="page-wishlist">
+        <div style="padding:24px 28px 0;font-family:'Playfair Display',serif;font-size:22px;font-weight:600">My Wishlist
+        </div>
+        <div class="wgrid" id="wishlist-grid"></div>
+    </div>
+
+    <div class="tcontainer" id="toast-container"></div>
+
+    <script>
+        const PRODUCTS = [
+            { id: "P001", name: "Running Shoes", price: 2499, stock: 14, e: "??" },
+            { id: "P002", name: "Cotton T-Shirt", price: 499, stock: 82, e: "??" },
+            { id: "P003", name: "Wireless Earbuds", price: 1899, stock: 3, e: "??" },
+            { id: "P004", name: "Smart Watch", price: 8999, stock: 0, e: "?" },
+            { id: "P005", name: "Backpack", price: 1299, stock: 27, e: "??" },
+            { id: "P006", name: "Sunglasses", price: 799, stock: 45, e: "???" },
+            { id: "P007", name: "Laptop Stand", price: 1599, stock: 2, e: "??" },
+            { id: "P008", name: "Water Bottle", price: 349, stock: 100, e: "??" },
+        ];
+
+        const ORDERS = [
+            { id: "ORD-482931", date: "2 Apr 2026", items: ["Running Shoes", "Water Bottle"], total: 2848, status: "shipped", courier: "BlueDart", eta: "2 days" },
+            { id: "ORD-371022", date: "28 Mar 2026", items: ["Wireless Earbuds"], total: 1899, status: "delivered", courier: "Delhivery", eta: "-" },
+            { id: "ORD-290145", date: "15 Mar 2026", items: ["Cotton T-Shirt", "Sunglasses", "Backpack"], total: 2597, status: "delivered", courier: "DTDC", eta: "-" },
+            { id: "ORD-182044", date: "1 Mar 2026", items: ["Smart Watch"], total: 8999, status: "cancelled", courier: "-", eta: "-" },
+        ];
+
+        let cart = {};
+        let wishlist = new Set();
+        let discount = 0;
+
+        function fmt(n) { return '?' + n.toLocaleString('en-IN'); }
+
+        function stockLabel(s) {
+            if (s === 0) return '<span class="pstock ou-s">Out of stock</span>';
+            if (s <= 5) return '<span class="pstock lo-s">Only ' + s + ' left</span>';
+            return '<span class="pstock in-s">In stock</span>';
+        }
+
+        function renderCard(p) {
+            const inCart = cart[p.id] || 0;
+            const wished = wishlist.has(p.id);
+            return `<div class="pcard" id="pc-${p.id}">
+    <div class="pimg">${p.e}</div>
+    <div class="pinfo">
+      <div class="pname">${p.name}</div>
+      <div class="pprice">${fmt(p.price)}</div>
+      ${stockLabel(p.stock)}
+    </div>
+    <div class="pact">
+      <button class="badd" ${p.stock === 0 ? 'disabled' : ''} onclick="addToCart('${p.id}')">
+        ${inCart > 0 ? 'In Cart (' + inCart + ')' : 'Add to Cart'}
+      </button>
+      <button class="bwish${wished ? ' on' : ''}" onclick="toggleWish('${p.id}')" title="Wishlist">${wished ? '?' : '?'}</button>
+    </div>
+  </div>`;
+        }
+
+        function renderGrid(id, products) {
+            document.getElementById(id).innerHTML = products.map(p => renderCard(p)).join('');
+        }
+
+        function filterProducts() {
+            const q = (document.getElementById('search-input').value || '').toLowerCase();
+            const sort = document.getElementById('sort-select').value;
+            let list = PRODUCTS.filter(p => p.name.toLowerCase().includes(q));
+            if (sort === 'price-asc') list.sort((a, b) => a.price - b.price);
+            else if (sort === 'price-desc') list.sort((a, b) => b.price - a.price);
+            else if (sort === 'name') list.sort((a, b) => a.name.localeCompare(b.name));
+            else if (sort === 'stock') list.sort((a, b) => b.stock - a.stock);
+            document.getElementById('product-count').textContent = list.length + ' item' + (list.length !== 1 ? 's' : '');
+            renderGrid('all-products', list);
+        }
+
+        function addToCart(id) {
+            const p = PRODUCTS.find(x => x.id === id);
+            if (!p || p.stock === 0) return;
+            cart[id] = (cart[id] || 0) + 1;
+            updateBadge();
+            refreshCartBtns(id);
+            showToast(p.name + ' added to cart', 'ok');
+            renderCart();
+            renderCoSummary();
+        }
+
+        function removeFromCart(id) {
+            delete cart[id];
+            updateBadge();
+            refreshCartBtns(id);
+            showToast('Item removed', 'wa');
+            renderCart();
+            renderCoSummary();
+        }
+
+        function changeQty(id, d) {
+            if (!cart[id]) return;
+            cart[id] += d;
+            if (cart[id] <= 0) { removeFromCart(id); return; }
+            updateBadge();
+            refreshCartBtns(id);
+            renderCart();
+            renderCoSummary();
+        }
+
+        function refreshCartBtns(id) {
+            const c = cart[id] || 0;
+            document.querySelectorAll('#pc-' + id + ' .badd').forEach(b => {
+                b.textContent = c > 0 ? 'In Cart (' + c + ')' : 'Add to Cart';
+            });
+        }
+
+        function updateBadge() {
+            const n = Object.values(cart).reduce((a, b) => a + b, 0);
+            document.getElementById('cart-count').textContent = n;
+        }
+
+        function renderCart() {
+            const el = document.getElementById('cart-items-list');
+            const keys = Object.keys(cart);
+            if (!keys.length) {
+                el.innerHTML = '<div class="empty"><div class="eico">??</div><div class="etitle">Your cart is empty</div><div class="esub">Browse products and add items</div><button class="hbtn p" onclick="showPage(\'products\')">Shop Now</button></div>';
+                updateSum(0); return;
+            }
+            let sub = 0;
+            const rows = keys.map(id => {
+                const p = PRODUCTS.find(x => x.id === id);
+                const t = p.price * cart[id]; sub += t;
+                return `<div class="citem">
+      <div class="cimg">${p.e}</div>
+      <div style="flex:1">
+        <div class="cname">${p.name}</div>
+        <div class="cunit">${fmt(p.price)} each</div>
+      </div>
+      <div class="qctrl">
+        <button class="qbtn" onclick="changeQty('${id}',-1)">?</button>
+        <span style="font-weight:600;min-width:20px;text-align:center">${cart[id]}</span>
+        <button class="qbtn" onclick="changeQty('${id}',1)">+</button>
+      </div>
+      <div class="qtot">${fmt(t)}</div>
+      <button class="xbtn" onclick="removeFromCart('${id}')">?</button>
+    </div>`;
+            }).join('');
+            el.innerHTML = `<div class="cart-hd"><span>${keys.length} item${keys.length > 1 ? 's' : ''}</span><span style="font-size:12px;color:var(--muted)">Subtotal: ${fmt(sub)}</span></div>${rows}`;
+            updateSum(sub);
+        }
+
+        function updateSum(sub) {
+            const del = sub > 0 ? 49 : 0;
+            document.getElementById('sum-sub').textContent = fmt(sub);
+            document.getElementById('sum-del').textContent = fmt(del);
+            document.getElementById('sum-disc').textContent = '?' + fmt(discount);
+            document.getElementById('sum-tot').textContent = fmt(Math.max(0, sub + del - discount));
+        }
+
+        function renderCoSummary() {
+            const keys = Object.keys(cart);
+            let sub = 0;
+            const rows = keys.map(id => {
+                const p = PRODUCTS.find(x => x.id === id);
+                const t = p.price * cart[id]; sub += t;
+                return `<div style="display:flex;justify-content:space-between;font-size:13px"><span>${p.name} ×${cart[id]}</span><span style="font-weight:500">${fmt(t)}</span></div>`;
+            }).join('');
+            document.getElementById('co-items').innerHTML = rows || '<span style="font-size:13px;color:var(--muted)">No items in cart</span>';
+            document.getElementById('co-sub').textContent = fmt(sub);
+            document.getElementById('co-tot').textContent = fmt(sub + (sub > 0 ? 49 : 0));
+        }
+
+        function applyCoupon() {
+            const code = (document.getElementById('coupon-input').value || '').trim().toUpperCase();
+            if (code === 'SAVE10') { discount = 100; showToast('Coupon SAVE10 applied! ?100 off', 'ok'); }
+            else if (code === 'FIRST50') { discount = 50; showToast('Coupon FIRST50 applied! ?50 off', 'ok'); }
+            else { showToast('Invalid coupon code', 'er'); return; }
+            const sub = Object.keys(cart).reduce((a, id) => a + (PRODUCTS.find(x => x.id === id).price * cart[id]), 0);
+            updateSum(sub);
+        }
+
+        function placeOrder() {
+            if (!Object.keys(cart).length) { showToast('Your cart is empty!', 'er'); return; }
+            const oid = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
+            showToast('Order ' + oid + ' placed successfully!', 'ok');
+            cart = {}; discount = 0;
+            updateBadge(); renderCart(); renderCoSummary();
+            setTimeout(() => showPage('orders'), 900);
+        }
+
+        function toggleWish(id) {
+            const p = PRODUCTS.find(x => x.id === id);
+            if (wishlist.has(id)) {
+                wishlist.delete(id);
+                showToast(p.name + ' removed from wishlist', 'wa');
+            } else {
+                wishlist.add(id);
+                showToast(p.name + ' added to wishlist', 'ok');
+            }
+            document.querySelectorAll('#pc-' + id + ' .bwish').forEach(b => {
+                b.textContent = wishlist.has(id) ? '?' : '?';
+                b.className = 'bwish' + (wishlist.has(id) ? ' on' : '');
+            });
+            document.getElementById('wish-count').textContent = wishlist.size;
+            renderWishlist();
+        }
+
+        function renderWishlist() {
+            const el = document.getElementById('wishlist-grid');
+            if (!wishlist.size) {
+                el.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="eico">?</div><div class="etitle">Nothing wishlisted yet</div><div class="esub">Heart products you love to save them here</div><button class="hbtn p" onclick="showPage(\'products\')">Browse Products</button></div>';
+                return;
+            }
+            el.innerHTML = Array.from(wishlist).map(id => renderCard(PRODUCTS.find(x => x.id === id))).join('');
+        }
+
+        function renderOrders() {
+            const sm = { shipped: 'ss', processing: 'sp', delivered: 'sd', cancelled: 'sc' };
+            const sl = { shipped: 'Shipped', processing: 'Processing', delivered: 'Delivered', cancelled: 'Cancelled' };
+            document.getElementById('orders-list').innerHTML = ORDERS.map(o => `
+    <div class="ocard">
+      <div class="otop">
+        <div><div class="oid">${o.id}</div><div class="odate">${o.date}</div></div>
+        <span class="ostatus ${sm[o.status]}">${sl[o.status]}</span>
+      </div>
+      <div class="ochips">${o.items.map(i => `<span class="ochip">${i}</span>`).join('')}</div>
+      <div class="obot">
+        <span class="ototal">${fmt(o.total)}</span>
+        ${o.status === 'shipped'
+                    ? `<button class="trkbtn" onclick="showToast('${o.courier} · ETA ${o.eta}','ok')">Track Package ?</button>`
+                    : o.status === 'delivered'
+                        ? `<span style="font-size:12px;color:var(--accent2);font-weight:500">? Delivered</span>`
+                        : `<span style="font-size:12px;color:#A32D2D;font-weight:500">Cancelled</span>`}
+      </div>
+    </div>`).join('');
+        }
+
+        function selectPay(el) {
+            document.querySelectorAll('.popt').forEach(x => x.classList.remove('sel'));
+            el.classList.add('sel');
+            document.getElementById('card-fields').style.display = el.textContent === 'Cash on Delivery' ? 'none' : 'block';
+        }
+
+        function showPage(name) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.getElementById('page-' + name).classList.add('active');
+            const nm = { home: 0, products: 1, orders: 2, wishlist: 3, account: 4 };
+            if (nm[name] !== undefined) document.querySelectorAll('.nav-link')[nm[name]].classList.add('active');
+            if (name === 'products') filterProducts();
+            if (name === 'cart') renderCart();
+            if (name === 'checkout') renderCoSummary();
+            if (name === 'orders') renderOrders();
+            if (name === 'wishlist') renderWishlist();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showToast(msg, type) {
+            const ico = { ok: '?', er: '?', wa: '!' };
+            const t = document.createElement('div');
+            t.className = 'toast';
+            t.innerHTML = `<span class="ticon ${type}">${ico[type] || 'i'}</span>${msg}`;
+            const c = document.getElementById('toast-container');
+            c.appendChild(t);
+            setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity .3s'; setTimeout(() => t.remove(), 320); }, 2600);
+        }
+
+        // Init
+        renderGrid('home-products', PRODUCTS.slice(0, 4));
+        filterProducts();
+        renderOrders();
+    </script>
+</body>
+
+</html>
